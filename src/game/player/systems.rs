@@ -27,6 +27,15 @@ pub fn spawn_player(
   }
 }
 
+pub fn despawn_player(
+  mut commands: Commands,
+  player_query: Query<Entity, With<Player>>,
+) {
+  if let Ok(e) = player_query.get_single() {
+    commands.entity(e).despawn();
+  }
+}
+
 pub fn move_player(
   keyboard_input: Res<Input<KeyCode>>,
   mut player_query: Query<&mut Transform, With<Player>>,

@@ -2,16 +2,17 @@ use bevy::app::AppExit;
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
-use crate::events::*;
+use crate::game::SimulationState;
+use crate::{events::*, AppState};
 
-use crate::player::constants::SIZE as PLAYER_SIZE;
-use crate::enemy::constants::SIZE  as ENEMY_SIZE;
-use crate::star::constants::SIZE   as STAR_SIZE;
+use crate::game::player::constants::SIZE as PLAYER_SIZE;
+use crate::game::enemy::constants::SIZE  as ENEMY_SIZE;
+use crate::game::star::constants::SIZE   as STAR_SIZE;
 
-use crate::player::components::Player;
-use crate::enemy::components::Enemy;
-use crate::score::resources::Score;
-use crate::star::components::Star;
+use crate::game::player::components::Player;
+use crate::game::enemy::components::Enemy;
+use crate::game::score::resources::Score;
+use crate::game::star::components::Star;
 
 pub fn spawn_camera(
   mut commands: Commands,
@@ -108,6 +109,36 @@ pub fn detect_pickup(
   }
 }
 
+pub fn transition_to_game_state(
+  keyboard_input: Res<Input<KeyCode>>,
+  app_state: Res<State<AppState>>,
+  mut next_app_state: ResMut<NextState<AppState>>,
+) {
+  if keyboard_input.just_pressed(KeyCode::G) {
+    if app_state.0 != AppState::Game {
+      next_app_state.set(AppState::Game);
+
+      println!("Transitioned to game state");
+    }
+  }
+}
+
+pub fn transition_to_main_menu_state(
+  keyboard_input: Res<Input<KeyCode>>,
+  app_state: Res<State<AppState>>,
+  mut next_app_state: ResMut<NextState<AppState>>,
+  mut next_sim_state: ResMut<NextState<SimulationState>>,
+) {
+  if keyboard_input.just_pressed(KeyCode::M) {
+    if app_state.0 != AppState::MainMenu {
+      next_app_state.set(AppState::MainMenu);
+      next_sim_state.set(SimulationState::Paused);
+
+      println!("Transitioned to main menu state");
+    }
+  }
+}
+
 pub fn exit_game(
   keyboard_input: Res<Input<KeyCode>>,
   mut app_exit_event_writer: EventWriter<AppExit>,
@@ -118,9 +149,14 @@ pub fn exit_game(
 }
 
 pub fn handle_game_over(
-  mut game_over_event_reader: EventReader<GameOver>
+  mut game_over_event_reader: EventReader<GameOver>,
+  mut next_app_state: ResMut<NextState<AppState>>,
+  mut next_sim_state: ResMut<NextState<SimulationState>>,
 ) {
   for event in game_over_event_reader.iter() {
     println!("Game over! Final score: {}", event.score.to_string());
+
+    next_app_state.set(AppState::GameOver);
+    next_sim_state.set(SimulationState::Paused);
   }
 }

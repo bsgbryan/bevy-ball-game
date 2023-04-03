@@ -1,9 +1,21 @@
 use bevy::prelude::*;
 
-use crate::GameOver;
+use crate::events::GameOver;
 
 use super::resources::Score;
 use super::resources::HighScores;
+
+pub fn init_score(
+  mut commands: Commands
+) {
+  commands.insert_resource(Score::default());
+}
+
+pub fn remove_score(
+  mut commands: Commands
+) {
+  commands.remove_resource::<Score>();
+}
 
 pub fn update_score(score: Res<Score>) {
   if score.is_changed() {

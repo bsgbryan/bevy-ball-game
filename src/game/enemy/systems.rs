@@ -53,6 +53,15 @@ pub fn spawn_enemies(
   }
 }
 
+pub fn despawn_enemies(
+  mut commands: Commands,
+  enemy_query: Query<Entity, With<Enemy>>,
+) {
+  for e in enemy_query.iter() {
+    commands.entity(e).despawn();
+  }
+}
+
 pub fn move_enemy(
   mut enemy_query: Query<(&mut Transform, &Enemy)>,
   time: Res<Time>,
