@@ -8,6 +8,7 @@ use pause_menu::PauseMenuPlugin;
 pub mod components;
 pub mod elements;
 pub mod styles;
+pub mod interactions;
 
 mod game_over_menu;
 mod hud;
