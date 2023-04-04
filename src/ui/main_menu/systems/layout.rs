@@ -1,15 +1,23 @@
 use bevy::prelude::*;
 
-use crate::ui::components::QuitButton;
-use crate::ui::main_menu::components::{MainMenu, PlayButton};
-use crate::ui::styles::{NORMAL_BUTTON_COLOR, BUTTON_STYLE, text_style};
-use crate::ui::main_menu::styles::TITLE_IMAGE_STYLE;
+use crate::ui::{
+  components::QuitButton,
+  elements::{
+    btn,
+    centered_text,
+    img,
+  },
+  main_menu::components::{
+    MainMenu,
+    PlayButton
+  }
+};
 
 pub fn spawn_main_menu(
   mut commands: Commands,
   asset_server: Res<AssetServer>,
 ) {
-  let _e = build_main_menu(&mut commands, &asset_server);
+  build_main_menu(&mut commands, &asset_server);
 }
 
 pub fn despawn_main_menu(
@@ -25,21 +33,22 @@ pub fn build_main_menu(
   commands: &mut Commands,
   asset_server: &Res<AssetServer>,
 ) -> Entity {
-  commands.spawn((
-    NodeBundle {
-      style: Style {
-        size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
-        flex_direction: FlexDirection::Column,
-        justify_content: JustifyContent::Center,
-        align_items: AlignItems::Center,
-        gap: Size::new(Val::Px(8.0), Val::Px(8.0)),
+  commands.
+    spawn((
+      NodeBundle {
+        style: Style {
+          size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
+          flex_direction: FlexDirection::Column,
+          justify_content: JustifyContent::Center,
+          align_items: AlignItems::Center,
+          gap: Size::new(Val::Px(8.0), Val::Px(8.0)),
+          ..default()
+        },
+        background_color: Color::BLACK.into(),
         ..default()
       },
-      background_color: Color::BLACK.into(),
-      ..default()
-    },
-    MainMenu
-  )).
+      MainMenu
+    )).
     with_children(|parent| {
       // === TITLE ===
       parent.
@@ -54,77 +63,21 @@ pub fn build_main_menu(
           ..default()
         }).
         with_children(|parent| {
-          // === LEFT IMAGE ===
-          parent.spawn(ImageBundle {
-            style: TITLE_IMAGE_STYLE,
-            image: asset_server.load("sprites/ball_blue_large.png").into(),
-            ..default()
-          });
-
-          // === TEXT ===
-          parent.spawn(TextBundle {
-            text: Text {
-              sections: vec![TextSection::new(
-                "Bevy Ball Game",
-                text_style(64.0, &asset_server)
-              )],
-              ..default()
-            },
-            ..default()
-          });
-
-          // === RIGHT IMAGE ===
-          parent.spawn(ImageBundle {
-            style: TITLE_IMAGE_STYLE,
-            image: asset_server.load("sprites/ball_red_large.png").into(),
-            ..default()
-          });
+          parent.spawn(img("ball_blue_large", 64.0, &asset_server));
+          parent.spawn(centered_text("Bevy Ball Game", 64.0, &asset_server));
+          parent.spawn(img("ball_red_large", 64.0, &asset_server));
         });
 
-      // === PLAY BUTTON ===
       parent.
-        spawn((
-          ButtonBundle {
-            style: BUTTON_STYLE,
-            background_color: NORMAL_BUTTON_COLOR.into(),
-            ..default()
-          },
-          PlayButton
-        )).
+        spawn(btn::<PlayButton>()).
         with_children(|parent| {
-          parent.spawn(TextBundle {
-            text: Text {
-              sections: vec![TextSection::new(
-                "Play",
-                text_style(32.0, &asset_server)
-              )],
-              ..default()
-            },
-            ..default()
-          });
+          parent.spawn(centered_text("Play", 32.0, &asset_server));
         });
 
-      // === QUIT BUTTON ===
       parent.
-        spawn((
-          ButtonBundle {
-            style: BUTTON_STYLE,
-            background_color: NORMAL_BUTTON_COLOR.into(),
-            ..default()
-          },
-          QuitButton
-        )).
+        spawn(btn::<QuitButton>()).
         with_children(|parent| {
-          parent.spawn(TextBundle {
-            text: Text {
-              sections: vec![TextSection::new(
-                "Quit",
-                text_style(32.0, &asset_server)
-              )],
-              ..default()
-            },
-            ..default()
-          });
+          parent.spawn(centered_text("Quit", 32.0, &asset_server));
         });
     }).
     id() 

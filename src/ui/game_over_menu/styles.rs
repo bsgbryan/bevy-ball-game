@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-pub const GAME_OVER_MENU_STYLE: Style = Style {
+pub const ELEMENT_STYLE: Style = Style {
   position_type: PositionType::Absolute, // Needed to display separately from HUD.
   display: Display::Flex,                // Hidden by Default
   justify_content: JustifyContent::Center,
@@ -9,7 +9,7 @@ pub const GAME_OVER_MENU_STYLE: Style = Style {
   ..Style::DEFAULT
 };
 
-pub const GAME_OVER_MENU_CONTAINER_STYLE: Style = Style {
+pub const CONTAINER_STYLE: Style = Style {
   display: Display::Flex,
   flex_direction: FlexDirection::Column,
   justify_content: JustifyContent::Center,

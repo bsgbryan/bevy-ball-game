@@ -113,12 +113,12 @@ pub fn transition_to_game_state(
   keyboard_input: Res<Input<KeyCode>>,
   app_state: Res<State<AppState>>,
   mut next_app_state: ResMut<NextState<AppState>>,
+  mut next_sim_state: ResMut<NextState<SimulationState>>,
 ) {
   if keyboard_input.just_pressed(KeyCode::G) {
     if app_state.0 != AppState::Game {
       next_app_state.set(AppState::Game);
-
-      println!("Transitioned to game state");
+      next_sim_state.set(SimulationState::Unloaded);
     }
   }
 }
@@ -132,9 +132,7 @@ pub fn transition_to_main_menu_state(
   if keyboard_input.just_pressed(KeyCode::M) {
     if app_state.0 != AppState::MainMenu {
       next_app_state.set(AppState::MainMenu);
-      next_sim_state.set(SimulationState::Paused);
-
-      println!("Transitioned to main menu state");
+      next_sim_state.set(SimulationState::Unloaded);
     }
   }
 }
@@ -153,10 +151,8 @@ pub fn handle_game_over(
   mut next_app_state: ResMut<NextState<AppState>>,
   mut next_sim_state: ResMut<NextState<SimulationState>>,
 ) {
-  for event in game_over_event_reader.iter() {
-    println!("Game over! Final score: {}", event.score.to_string());
-
+  for _ in game_over_event_reader.iter() {
     next_app_state.set(AppState::GameOver);
-    next_sim_state.set(SimulationState::Paused);
+    next_sim_state.set(SimulationState::Unloaded);
   }
 }

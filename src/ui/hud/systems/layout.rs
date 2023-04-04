@@ -5,18 +5,20 @@ use crate::ui::{
     components::{
       EnemyText,
       HUD,
-      ScoreText
+      ScoreText,
     },
     styles::{
       HUD_STYLE,
-      IMAGE_STYLE,
       LHS_STYLE,
-      RHS_STYLE
+      RHS_STYLE,
     }
   },
   styles::{
-    text_style,
     BACKGROUND_COLOR
+  },
+  elements::{
+    centered_text,
+    img,
   }
 };
 
@@ -24,89 +26,44 @@ pub fn spawn_hud(
   mut commands: Commands,
   asset_server: Res<AssetServer>
 ) {
-  build_hud(&mut commands, &asset_server);
-}
-
-pub fn build_hud(
-  commands: &mut Commands,
-  asset_server: &Res<AssetServer>
-) -> Entity {
-    commands.
-      spawn((
-        NodeBundle {
-          style: HUD_STYLE,
-          ..default()
-        },
-        HUD,
-      )).
-      with_children(|parent| {
-        // LHS
-        parent.
-          spawn(NodeBundle {
-              style: LHS_STYLE,
-              background_color: BACKGROUND_COLOR.into(),
-              ..default()
-          }).
-          with_children(|parent| {
-            // Star Image
-            parent.
-              spawn(ImageBundle {
-                style: IMAGE_STYLE,
-                image: asset_server.load("sprites/star.png").into(),
-                ..default()
-              });
-            // Score Text
-            parent.
-              spawn((
-                TextBundle {
-                  text: Text {
-                    sections: vec![TextSection::new(
-                      "0",
-                      text_style(64.0, &asset_server),
-                    )],
-                    alignment: TextAlignment::Center,
-                    ..default()
-                  },
-                  ..default()
-                },
-                ScoreText,
-              ));
-        });
-        // RHS
-        parent.
-          spawn(NodeBundle {
-            style: RHS_STYLE,
+  commands.
+    spawn((
+      NodeBundle {
+        style: HUD_STYLE,
+        ..default()
+      },
+      HUD,
+    )).
+    with_children(|parent| {
+      // LHS
+      parent.
+        spawn(NodeBundle {
+            style: LHS_STYLE,
             background_color: BACKGROUND_COLOR.into(),
             ..default()
-          }).
-          with_children(|parent| {
-            // Enemy Text
-            parent.
-              spawn((
-                TextBundle {
-                  style: Style { ..default() },
-                  text: Text {
-                    sections: vec![TextSection::new(
-                      "0",
-                      text_style(64.0, &asset_server),
-                    )],
-                    alignment: TextAlignment::Center,
-                    ..default()
-                  },
-                  ..default()
-                },
-                EnemyText,
-              ));
-            // Enemy Image
-            parent.
-              spawn(ImageBundle {
-                style: IMAGE_STYLE,
-                image: asset_server.load("sprites/ball_red_large.png").into(),
-                ..default()
-              });
-          });
-        })
-        .id()
+        }).
+        with_children(|parent| {
+          parent.spawn(img("star", 48.0, &asset_server));
+          parent.spawn((
+            centered_text("0", 64.0, &asset_server),
+            ScoreText,
+          ));
+      });
+      // RHS
+      parent.
+        spawn(NodeBundle {
+          style: RHS_STYLE,
+          background_color: BACKGROUND_COLOR.into(),
+          ..default()
+        }).
+        with_children(|parent| {
+          parent.spawn((
+            centered_text("0", 64.0, &asset_server),
+            EnemyText,
+          ));
+          parent.spawn(img("ball_red_large", 48.0, &asset_server));
+        });
+      });
 }
 
 pub fn despawn_hud(

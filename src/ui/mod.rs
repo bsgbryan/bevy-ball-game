@@ -6,6 +6,7 @@ use main_menu::MainMenuPlugin;
 use pause_menu::PauseMenuPlugin;
 
 pub mod components;
+pub mod elements;
 pub mod styles;
 
 mod game_over_menu;

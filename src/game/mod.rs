@@ -22,12 +22,6 @@ impl Plugin for GamePlugin {
     app.
       add_state::<SimulationState>().
       add_event::<GameOver>().
-      add_system(pause_simulation.
-        in_schedule(OnEnter(AppState::Game))
-      ).
-      // add_system(run_simulation.
-      //   in_schedule(OnExit(AppState::Game))
-      // ).
       add_plugin(EnemyPlugin).
       add_plugin(PlayerPlugin).
       add_plugin(ScorePlugin).
@@ -43,4 +37,5 @@ pub enum SimulationState {
   #[default]
   Running,
   Paused,
+  Unloaded,
 }

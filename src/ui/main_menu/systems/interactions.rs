@@ -5,6 +5,7 @@ use bevy::{
 
 use crate::{
   AppState,
+  game::SimulationState,
   ui::{
     styles::{
       NORMAL_BUTTON_COLOR,
@@ -15,7 +16,8 @@ use crate::{
       components::{
         PlayButton
       }
-    }, components::QuitButton
+    },
+    components::QuitButton
   }
 };
 
@@ -25,6 +27,7 @@ pub fn interact_with_play_button(
     (Changed<Interaction>, With<PlayButton>)
   >,
   mut next_app_state: ResMut<NextState<AppState>>,
+  mut next_sim_state: ResMut<NextState<SimulationState>>,
 ) {
   if let Ok((interaction, mut background_color)) = button_query.get_single_mut() {
     match *interaction {
@@ -32,6 +35,7 @@ pub fn interact_with_play_button(
         *background_color = PRESSED_BUTTON_COLOR.into();
 
         next_app_state.set(AppState::Game);
+        next_sim_state.set(SimulationState::Running);
       }
       Interaction::Hovered => {
         *background_color = HOVERED_BUTTON_COLOR.into();

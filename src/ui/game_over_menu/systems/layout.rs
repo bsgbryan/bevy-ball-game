@@ -1,33 +1,35 @@
 use bevy::prelude::*;
 
-use crate::ui::components::{
-  QuitButton,
-  MainMenuButton
-};
-use crate::ui::styles::*;
-use crate::ui::game_over_menu::{
+use crate::ui::{
   components::{
-    GameOverMenu,
-    FinalScoreText,
-    RestartButton
+    QuitButton,
+    MainMenuButton,
   },
-  styles::{
-    GAME_OVER_MENU_STYLE,
-    GAME_OVER_MENU_CONTAINER_STYLE
+  elements::{
+    btn,
+    centered_text,
   },
+  game_over_menu::{
+    components::{
+      GameOverMenu,
+      FinalScoreText,
+      RestartButton,
+    },
+    styles::{
+      ELEMENT_STYLE,
+      CONTAINER_STYLE,
+    }
+  }
 };
 
 pub fn spawn_game_over_menu(
-  mut commands: Commands, asset_server: Res<AssetServer>
+  mut commands: Commands,
+  asset_server: Res<AssetServer>
 ) {
-  build_game_over_menu(&mut commands, &asset_server);
-}
-
-pub fn build_game_over_menu(commands: &mut Commands, asset_server: &Res<AssetServer>) -> Entity {
   commands.
     spawn((
       NodeBundle {
-        style: GAME_OVER_MENU_STYLE,
+        style: ELEMENT_STYLE,
         z_index: ZIndex::Local(2), // See Ref. 1
         ..default()
       },
@@ -36,119 +38,37 @@ pub fn build_game_over_menu(commands: &mut Commands, asset_server: &Res<AssetSer
     with_children(|parent| {
       parent.
         spawn(NodeBundle {
-          style: GAME_OVER_MENU_CONTAINER_STYLE,
+          style: CONTAINER_STYLE,
           background_color: Color::BLACK.into(),
           ..default()
         }).
         with_children(|parent| {
-          // === TITLE ===
+          parent.spawn(centered_text("Game Over", 64.0, &asset_server));
+
+          parent.spawn( (
+            centered_text("Doesn't matter", 32.0, &asset_server),
+            FinalScoreText,
+          ));
+
           parent.
-            spawn(TextBundle {
-              text: Text {
-                sections: vec![TextSection::new(
-                  "Game Over",
-                  text_style(64.0, &asset_server),
-                )],
-                alignment: TextAlignment::Center,
-                ..default()
-              },
-              ..default()
+            spawn(btn::<RestartButton>()).
+            with_children(|parent| {
+              parent.spawn(centered_text("Restart", 32.0, &asset_server));
             });
 
-          // === FINAL SCORE TEXT ===
           parent.
-            spawn((
-              TextBundle {
-                text: Text {
-                  sections: vec![TextSection::new(
-                    "Your final score was:",
-                    text_style(32.0, &asset_server),
-                  )],
-                  alignment: TextAlignment::Center,
-                  ..default()
-                },
-                ..default()
-              },
-              FinalScoreText,
-            ));
-
-          // === RESTART BUTTON ===
-          parent.
-            spawn((
-              ButtonBundle {
-                style: BUTTON_STYLE,
-                background_color: NORMAL_BUTTON_COLOR.into(),
-                ..default()
-              },
-              RestartButton,
-            )).
+            spawn(btn::<MainMenuButton>()).
             with_children(|parent| {
-              parent.
-                spawn(TextBundle {
-                  text: Text {
-                    sections: vec![TextSection::new(
-                      "Restart",
-                      text_style(32.0, &asset_server),
-                    )],
-                    alignment: TextAlignment::Center,
-                    ..default()
-                  },
-                  ..default()
-                });
+              parent.spawn(centered_text("Main Menu", 32.0, &asset_server));
             });
 
-          // === MAIN MENU BUTTON ===
           parent.
-            spawn((
-              ButtonBundle {
-                style: BUTTON_STYLE,
-                background_color: NORMAL_BUTTON_COLOR.into(),
-                ..default()
-              },
-              MainMenuButton,
-            )).
+            spawn(btn::<QuitButton>()).
             with_children(|parent| {
-              parent.
-                spawn(TextBundle {
-                  text: Text {
-                    sections: vec![TextSection::new(
-                      "Main Menu",
-                      text_style(32.0, &asset_server),
-                    )],
-                    alignment: TextAlignment::Center,
-                    ..default()
-                  },
-                  ..default()
-                });
-            });
-
-          // === QUIT BUTTON ===
-          parent.
-            spawn((
-              ButtonBundle {
-                style: BUTTON_STYLE,
-                background_color: NORMAL_BUTTON_COLOR.into(),
-                ..default()
-              },
-              QuitButton,
-            )).
-            with_children(|parent| {
-              parent.
-                spawn(TextBundle {
-                  text: Text {
-                    sections: vec![TextSection::new(
-                      "Quit",
-                      text_style(32.0, &asset_server),
-                    )],
-                    alignment: TextAlignment::Center,
-                    ..default()
-                  },
-                  ..default()
-                });
+              parent.spawn(centered_text("Quit", 32.0, &asset_server));
             });
         });
-    })
-    .id()
+    });
 }
 
 pub fn despawn_game_over_menu(

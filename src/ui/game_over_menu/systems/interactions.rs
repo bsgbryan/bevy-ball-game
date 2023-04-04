@@ -55,7 +55,7 @@ pub fn interact_with_main_menu_button(
         *color = PRESSED_BUTTON_COLOR.into();
 
         next_app_state.set(AppState::MainMenu);
-        next_sim_state.set(SimulationState::Running);
+        next_sim_state.set(SimulationState::Unloaded);
       }
       Interaction::Hovered => {
         *color = HOVERED_BUTTON_COLOR.into();

@@ -28,9 +28,3 @@ pub const RHS_STYLE: Style = Style {
     margin: UiRect::new(Val::Px(0.0), Val::Px(32.0), Val::Px(0.0), Val::Px(0.0)),
     ..Style::DEFAULT
 };
-
-pub const IMAGE_STYLE: Style = Style {
-    size: Size::new(Val::Px(48.0), Val::Px(48.0)),
-    margin: UiRect::new(Val::Px(8.0), Val::Px(8.0), Val::Px(8.0), Val::Px(8.0)),
-    ..Style::DEFAULT
-};
