@@ -5,16 +5,17 @@ use bevy::{
 
 use crate::{
   AppState,
-  main_menu::{
-    components::{
-      PlayButton,
-      QuitButton
-    },
+  ui::{
     styles::{
       NORMAL_BUTTON_COLOR,
       PRESSED_BUTTON_COLOR,
       HOVERED_BUTTON_COLOR,
-    }
+    },
+    main_menu::{
+      components::{
+        PlayButton
+      }
+    }, components::QuitButton
   }
 };
 

@@ -1,7 +1,9 @@
 use bevy::prelude::*;
 
-use crate::main_menu::components::{MainMenu, PlayButton, QuitButton};
-use crate::main_menu::styles::{NORMAL_BUTTON_COLOR, BUTTON_STYLE, TITLE_IMAGE_STYLE, text_style};
+use crate::ui::components::QuitButton;
+use crate::ui::main_menu::components::{MainMenu, PlayButton};
+use crate::ui::styles::{NORMAL_BUTTON_COLOR, BUTTON_STYLE, text_style};
+use crate::ui::main_menu::styles::TITLE_IMAGE_STYLE;
 
 pub fn spawn_main_menu(
   mut commands: Commands,
