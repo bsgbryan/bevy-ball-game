@@ -7,7 +7,7 @@ pub fn spawn_main_menu(
   mut commands: Commands,
   asset_server: Res<AssetServer>,
 ) {
-  let e = build_main_menu(&mut commands, &asset_server);
+  let _e = build_main_menu(&mut commands, &asset_server);
 }
 
 pub fn despawn_main_menu(

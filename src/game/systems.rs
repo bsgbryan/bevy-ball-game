@@ -8,12 +8,6 @@ pub fn pause_simulation(
   next_sim_state.set(SimulationState::Paused);
 }
 
-pub fn run_simulation(
-  mut next_sim_state: ResMut<NextState<SimulationState>>
-) {
-  next_sim_state.set(SimulationState::Running);
-}
-
 pub fn toggle_simulation(
   keyboard_input: Res<Input<KeyCode>>,
   simulation_state: Res<State<SimulationState>>,
